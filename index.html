@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POWER | الباقات الشهرية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Particles.js -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo',sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+overflow-x:hidden;
+position:relative;
+}
+
+/* Particles */
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* Header */
+header{
+text-align:center;
+padding:40px 20px 10px;
+}
+
+header h1{
+font-size:32px;
+background:linear-gradient(90deg,#38bdf8,#22c55e);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* Countdown */
+.countdown{
+text-align:center;
+margin:15px 0 30px;
+font-size:18px;
+color:#facc15;
+}
+
+/* Container */
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+padding:20px 40px 60px;
+}
+
+/* Card */
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:20px;
+padding:25px;
+text-align:center;
+transition:0.4s ease;
+transform:translateY(40px);
+opacity:0;
+position:relative;
+}
+
+.card.show{
+transform:translateY(0);
+opacity:1;
+}
+
+.card:hover{
+transform:translateY(-10px) scale(1.03);
+box-shadow:0 0 40px rgba(56,189,248,0.6);
+}
+
+/* Most Popular */
+.popular{
+border:2px solid gold;
+box-shadow:0 0 30px gold;
+}
+
+.badge{
+position:absolute;
+top:-12px;
+left:50%;
+transform:translateX(-50%);
+background:gold;
+color:black;
+padding:5px 15px;
+border-radius:20px;
+font-size:13px;
+font-weight:bold;
+}
+
+.card h2{
+margin-bottom:15px;
+color:#38bdf8;
+}
+
+.card p{
+margin:6px 0;
+}
+
+.price{
+margin:15px 0;
+font-size:20px;
+font-weight:bold;
+color:#facc15;
+}
+
+button{
+background:linear-gradient(90deg,#22c55e,#16a34a);
+border:none;
+padding:12px;
+border-radius:12px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+width:100%;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px rgba(34,197,94,0.7);
+}
+
+.note{
+text-align:center;
+padding:20px 20px 50px;
+color:#94a3b8;
+border-top:1px solid rgba(255,255,255,0.1);
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<header>
+<h1>🟦 POWER | الباقات الشهرية 🟦</h1>
+</header>
+
+<div class="countdown">
+⏳ عرض خاص ينتهي خلال: <span id="timer"></span>
+</div>
+
+<div class="container" id="packages"></div>
+
+<div class="note">
+📌 الاشتراك بالروبل لأول شهر فقط <br>
+التجديد بعد كده بيكون بالفلوس
+</div>
+
+<script>
+/* رقمك */
+const phone = "212679971052";
+
+/* الباقات */
+const packages = [
+{ name:"الباقة 1", cpu:"150%", ram:"3GB", mid:"3GB", price:"20 جنيه"},
+{ name:"الباقة 2", cpu:"200%", ram:"8GB", mid:"8.5GB", price:"40 جنيه"},
+{ name:"الباقة 3", cpu:"250%", ram:"12GB", mid:"12GB", price:"70 جنيه", popular:true},
+{ name:"الباقة 4", cpu:"300%", ram:"17GB", mid:"16GB", price:"110 جنيه"},
+{ name:"الباقة 5", cpu:"350%", ram:"21GB", mid:"22GB", price:"140 جنيه"},
+{ name:"الباقة 6", cpu:"400%", ram:"25GB", mid:"26GB", price:"200 جنيه"},
+{ name:"الباقة 7", cpu:"450%", ram:"28GB", mid:"29GB", price:"270 جنيه"},
+{ name:"الباقة 8", cpu:"500%", ram:"33GB", mid:"33GB", price:"310 جنيه"}
+];
+
+const container = document.getElementById("packages");
+
+packages.forEach((pkg,index)=>{
+const card = document.createElement("div");
+card.classList.add("card");
+if(pkg.popular) card.classList.add("popular");
+
+card.innerHTML = `
+${pkg.popular ? '<div class="badge">💎 Most Popular</div>' : ''}
+<h2>${pkg.name}</h2>
+<p>CPU: ${pkg.cpu}</p>
+<p>RAM: ${pkg.ram}</p>
+<p>MID: ${pkg.mid}</p>
+<div class="price">${pkg.price}</div>
+<button onclick="buy('${pkg.name}')">🛒 شراء الآن</button>
+`;
+
+container.appendChild(card);
+
+setTimeout(()=> card.classList.add("show"), index*150);
+});
+
+/* واتساب */
+function buy(packageName){
+let message = `مرحبا اريد شراء ${packageName}`;
+let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+window.open(url,'_blank');
+}
+
+/* Countdown 24 ساعة */
+let countDownDate = new Date().getTime() + (24*60*60*1000);
+
+let x = setInterval(function(){
+let now = new Date().getTime();
+let distance = countDownDate - now;
+
+let hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+let minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+let seconds = Math.floor((distance % (1000*60)) / 1000);
+
+document.getElementById("timer").innerHTML =
+hours + "h : " + minutes + "m : " + seconds + "s ";
+
+if(distance < 0){
+clearInterval(x);
+document.getElementById("timer").innerHTML = "انتهى العرض!";
+}
+},1000);
+
+/* Particles */
+particlesJS("particles-js",{
+"particles":{
+"number":{"value":60},
+"size":{"value":3},
+"move":{"speed":2},
+"line_linked":{"enable":true}
+}
+});
+</script>
+
+</body>
+</html>
