@@ -1,271 +1,546 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POWER | الباقات الشهرية</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWER | استضافة احترافية وباقات شهرية</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050b14;
+            --nav-bg: rgba(5, 11, 20, 0.85);
+            
+            --neon-blue: #38bdf8;
+            --neon-green: #22c55e;
+            
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(56, 189, 248, 0.2);
+            --glass-hover-border: rgba(56, 189, 248, 0.8);
+            
+            --cyan-glow: 0 0 20px rgba(56, 189, 248, 0.4);
+            --green-glow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
 
-<!-- Particles.js -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Cairo',sans-serif;
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+        }
 
-body{
-background:#0f172a;
-color:white;
-overflow-x:hidden;
-position:relative;
-}
+        #particles-js {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -2;
+            pointer-events: none;
+        }
 
-/* Particles */
-#particles-js{
-position:fixed;
-width:100%;
-height:100%;
-z-index:-1;
-}
+        .ambient-glow-1 {
+            position: absolute; top: -10%; right: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 60%);
+            z-index: -1; pointer-events: none;
+        }
 
-/* Header */
-header{
-text-align:center;
-padding:40px 20px 10px;
-}
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%; padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .logo svg { width: 30px; height: 30px; fill: url(#splitGradient); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+        .logo-text { background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Nav Links (Desktop) */
+        .nav-links { display: flex; gap: 30px; list-style: none; transition: 0.3s; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 600; font-size: 16px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--neon-blue); text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        
+        .btn-support { background: transparent; color: var(--neon-green); border: 2px solid var(--neon-green); padding: 8px 25px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-support:hover { background: var(--neon-green); color: #000; box-shadow: var(--green-glow); }
 
-header h1{
-font-size:32px;
-background:linear-gradient(90deg,#38bdf8,#22c55e);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
+        /* Hamburger Menu (Mobile) */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; }
+        .menu-toggle span { width: 25px; height: 3px; background-color: var(--neon-blue); border-radius: 3px; transition: 0.3s; }
 
-/* Countdown */
-.countdown{
-text-align:center;
-margin:15px 0 30px;
-font-size:18px;
-color:#facc15;
-}
+        /* --- Hero Section --- */
+        .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 120px 5% 50px; overflow: hidden; }
+        .hero-content { flex: 1; max-width: 600px; z-index: 2; margin-top: 40px; }
+        .hero-badge { display: inline-block; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--neon-blue); padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 20px; box-shadow: var(--cyan-glow); }
+        .hero-content h1 { font-size: 50px; line-height: 1.3; margin-bottom: 20px; font-weight: 800; }
+        .hero-content h1 span { background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: var(--cyan-glow); }
+        .hero-content p { font-size: 18px; color: var(--text-muted); line-height: 1.8; margin-bottom: 30px; }
+        
+        /* Urgency Timer in Hero */
+        .urgency-timer { display: flex; align-items: center; gap: 15px; background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 50, 50, 0.4); border-radius: 12px; padding: 15px 20px; margin-bottom: 35px; width: fit-content; box-shadow: 0 0 15px rgba(255, 0, 0, 0.2); }
+        .urgency-text { font-size: 15px; font-weight: bold; color: #ff4d4d; }
+        .timer-blocks { display: flex; gap: 8px; }
+        .t-block { background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 6px; font-weight: bold; font-family: monospace; font-size: 16px; color: #fff; min-width: 45px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
 
-/* Container */
-.container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
-padding:20px 40px 60px;
-}
+        .hero-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+        .btn-main { background: linear-gradient(135deg, var(--neon-blue), var(--neon-green)); color: #000; font-size: 18px; font-weight: bold; padding: 15px 35px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.3s; text-decoration: none; box-shadow: var(--green-glow); display: inline-flex; align-items: center; gap: 10px; }
+        .btn-main:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(34, 197, 94, 0.6); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--text-light); border: 1px solid var(--glass-border); padding: 15px 35px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--neon-blue); box-shadow: var(--cyan-glow); }
+        
+        .hero-image { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; z-index: 2; }
+        .hero-image img { width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: float 6s ease-in-out infinite; border: 1px solid rgba(56, 189, 248, 0.2); }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
 
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-border:1px solid rgba(255,255,255,0.1);
-border-radius:20px;
-padding:25px;
-text-align:center;
-transition:all 0.8s cubic-bezier(.17,.67,.83,.67);
-opacity:0;
-transform:translateY(80px) scale(0.95);
-}
+        /* --- Social Proof Statistics --- */
+        .stats-section { padding: 40px 5%; background: linear-gradient(90deg, rgba(56, 189, 248, 0.05), rgba(34, 197, 94, 0.05)); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .stats-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .stat-item h3 { font-size: 40px; color: var(--neon-blue); font-weight: 800; margin-bottom: 5px; text-shadow: var(--cyan-glow); }
+        .stat-item p { color: var(--text-muted); font-size: 16px; font-weight: 600; }
 
-.card.show{
-opacity:1;
-transform:translateY(0) scale(1);
-}
+        /* --- Section Titles --- */
+        .section-header { text-align: center; margin-bottom: 50px; padding: 0 5%; }
+        .section-header h2 { font-size: 36px; font-weight: 800; margin-bottom: 15px; }
+        .section-header p { font-size: 16px; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
-.card:hover{
-transform:translateY(-10px) scale(1.03);
-box-shadow:0 0 40px rgba(56,189,248,0.6);
-}
+        /* --- Features Section --- */
+        .features-section { padding: 80px 5%; position: relative; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 25px; border-radius: 20px; backdrop-filter: blur(15px); transition: 0.4s; text-align: right; overflow: hidden; position: relative; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); opacity: 0; transition: 0.4s; }
+        .feature-card:hover { transform: translateY(-8px); border-color: var(--neon-blue); box-shadow: var(--cyan-glow); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-icon { width: 50px; height: 50px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid rgba(56, 189, 248, 0.3); color: var(--neon-blue); }
+        .feature-icon svg { width: 25px; height: 25px; fill: currentColor; }
+        .feature-card h3 { font-size: 20px; margin-bottom: 10px; color: white; }
+        .feature-card p { color: var(--text-muted); line-height: 1.6; font-size: 14px; }
 
-/* Most Popular */
-.popular{
-border:2px solid gold;
-box-shadow:0 0 30px gold;
-}
+        /* --- Packages Section --- */
+        .packages-section { padding: 80px 5%; position: relative; }
+        .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
+        .pricing-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 35px 25px; text-align: center; position: relative; backdrop-filter: blur(20px); transition: all 0.5s ease; opacity: 0; transform: translateY(40px); display: flex; flex-direction: column; }
+        .pricing-card.show { opacity: 1; transform: translateY(0); }
+        .pricing-card:hover { transform: translateY(-10px); border-color: var(--glass-hover-border); box-shadow: 0 15px 35px rgba(0,0,0,0.6), var(--cyan-glow); }
+        .pricing-card.popular { border: 2px solid var(--neon-green); background: rgba(34, 197, 94, 0.05); transform: scale(1.05); z-index: 2; }
+        .pricing-card.popular:hover { transform: scale(1.05) translateY(-10px); box-shadow: var(--green-glow); }
+        
+        .popular-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #10b981, #059669); color: white; padding: 5px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); white-space: nowrap; }
+        .pkg-name { font-size: 24px; color: var(--neon-blue); margin-bottom: 15px; font-weight: 800; }
+        .popular .pkg-name { color: var(--neon-green); }
+        .pkg-price { font-size: 40px; font-weight: 800; color: white; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .pkg-price span { font-size: 15px; color: var(--text-muted); font-weight: 400; }
+        .pkg-specs { text-align: right; margin-bottom: 30px; flex-grow: 1; }
+        .spec-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 15px; color: var(--text-light); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .spec-item svg { width: 18px; height: 18px; fill: var(--neon-blue); flex-shrink: 0; }
+        .popular .spec-item svg { fill: var(--neon-green); }
+        
+        .btn-buy { width: 100%; padding: 14px; border-radius: 10px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; background: rgba(56, 189, 248, 0.1); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
+        .btn-buy:hover { background: var(--neon-blue); color: #000; box-shadow: var(--cyan-glow); }
+        .popular .btn-buy { background: linear-gradient(90deg, var(--neon-green), #10b981); color: black; border: none; }
+        .popular .btn-buy:hover { box-shadow: var(--green-glow); transform: scale(1.02); }
 
-.badge{
-position:absolute;
-top:-12px;
-left:50%;
-transform:translateX(-50%);
-background:gold;
-color:black;
-padding:5px 15px;
-border-radius:20px;
-font-size:13px;
-font-weight:bold;
-}
+        .trust-badge-container { display: flex; justify-content: center; margin-top: 40px; }
+        .trust-badge { display: flex; align-items: center; gap: 10px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px 25px; border-radius: 12px; color: var(--neon-green); font-weight: 600; box-shadow: var(--green-glow); font-size: 15px; }
+        .trust-badge svg { width: 22px; height: 22px; fill: currentColor; }
 
-.card h2{
-margin-bottom:15px;
-color:#38bdf8;
-}
+        /* --- Testimonials Section (Social Proof) --- */
+        .testimonials-section { padding: 80px 5%; background: rgba(255,255,255,0.01); }
+        .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .testi-card { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; position: relative; }
+        .stars { color: #facc15; margin-bottom: 15px; font-size: 18px; }
+        .testi-text { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        .testi-author { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--neon-blue), #3b82f6); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; border: 2px solid rgba(255,255,255,0.2); }
+        .a-info h4 { font-size: 15px; color: white; margin-bottom: 3px; }
+        .a-info p { font-size: 12px; color: var(--text-muted); }
 
-.card p{
-margin:6px 0;
-}
+        /* --- Footer --- */
+        footer { background: rgba(5, 11, 20, 0.95); border-top: 1px solid var(--glass-border); padding: 60px 5% 30px; margin-top: 50px; }
+        .footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .footer-col { flex: 1; min-width: 250px; }
+        .footer-col h4 { font-size: 20px; color: white; margin-bottom: 20px; position: relative; display: inline-block; }
+        .footer-col h4::after { content:''; position:absolute; bottom:-5px; right:0; width:50%; height:2px; background:var(--neon-blue); }
+        .footer-col p { color: var(--text-muted); line-height: 1.6; font-size: 14px; }
+        
+        .payment-methods { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .pay-box { background: #fff; padding: 5px 12px; border-radius: 6px; font-weight: 800; color: #000; font-size: 12px; display: flex; align-items: center; }
+        
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; transition: 0.3s; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .footer-links a:hover { color: var(--neon-blue); transform: translateX(-5px); }
+        
+        .footer-bottom { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); color: #64748b; font-size: 13px; }
 
-.price{
-margin:15px 0;
-font-size:20px;
-font-weight:bold;
-color:#facc15;
-}
+        /* ====== MOBILE RESPONSIVENESS ====== */
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 130px; }
+            .hero-content h1 { font-size: 38px; }
+            .hero-badge { margin: 0 auto 20px; }
+            .urgency-timer { margin: 0 auto 30px; flex-direction: column; justify-content: center; }
+            .hero-buttons { justify-content: center; }
+            .hero-image { margin-top: 50px; }
+            .pricing-card.popular { transform: scale(1); }
+            .pricing-card.popular:hover { transform: scale(1) translateY(-10px); }
+        }
 
-button{
-background:linear-gradient(90deg,#22c55e,#16a34a);
-border:none;
-padding:12px;
-border-radius:12px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-width:100%;
-}
-
-button:hover{
-transform:scale(1.05);
-box-shadow:0 0 20px rgba(34,197,94,0.7);
-}
-
-.note{
-text-align:center;
-padding:20px 20px 50px;
-color:#94a3b8;
-border-top:1px solid rgba(255,255,255,0.1);
-font-size:14px;
-}
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-border:1px solid rgba(255,255,255,0.1);
-border-radius:20px;
-padding:25px;
-text-align:center;
-transition:all 0.8s cubic-bezier(.17,.67,.83,.67);
-opacity:0;
-transform:translateY(80px) scale(0.95);
-}
-
-.card.show{
-opacity:1;
-transform:translateY(0) scale(1);
-}
-</style>
+        @media (max-width: 768px) {
+            /* Mobile Nav */
+            .nav-links {
+                position: absolute; top: 100%; right: 0; width: 100%;
+                background: var(--nav-bg); backdrop-filter: blur(15px);
+                flex-direction: column; gap: 0; text-align: center;
+                border-bottom: 1px solid var(--glass-border);
+                max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+            }
+            .nav-links.active { max-height: 350px; }
+            .nav-links li { padding: 15px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+            .btn-support { display: none; } /* Hide button in nav on mobile, put inside menu or rely on hero CTA */
+            .menu-toggle { display: flex; }
+            
+            .hero-content h1 { font-size: 32px; }
+            .hero-content p { font-size: 16px; }
+            .btn-main, .btn-secondary { width: 100%; justify-content: center; }
+            
+            .stats-grid { flex-direction: column; gap: 20px; }
+            .section-header h2 { font-size: 28px; }
+            
+            .pricing-card { padding: 25px 20px; }
+            .trust-badge { font-size: 13px; padding: 10px 15px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="particles-js"></div>
+    <!-- SVG Gradients -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+      <linearGradient id="splitGradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#38bdf8"></stop>
+        <stop offset="100%" stop-color="#22c55e"></stop>
+      </linearGradient>
+    </svg>
 
-<header>
-<h1>🟦 POWER | الباقات الشهرية 🟦</h1>
-</header>
+    <div class="ambient-glow-1"></div>
+    <div id="particles-js"></div>
 
-<div class="countdown">
-⏳ عرض خاص ينتهي خلال: <span id="timer"></span>
-</div>
+    <!-- Navbar -->
+    <nav>
+        <a href="#" class="logo">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span class="logo-text">POWER</span>
+        </a>
+        
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
 
-<div class="container" id="packages"></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="toggleMenu()">الرئيسية</a></li>
+            <li><a href="#features" onclick="toggleMenu()">المميزات</a></li>
+            <li><a href="#packages" onclick="toggleMenu()">الباقات</a></li>
+            <li><a href="#testimonials" onclick="toggleMenu()">آراء العملاء</a></li>
+            <li><a href="#contact" onclick="toggleMenu()">تواصل معنا</a></li>
+        </ul>
+        <a href="#packages" class="btn-support">ابدأ الآن</a>
+    </nav>
 
-<div class="note">
-📌 الاشتراك بالروبل لأول شهر فقط <br>
-التجديد بعد كده بيكون بالفلوس
-</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">⚡ الخيار الأول لمطوري البوتات</div>
+            <h1>استضافة عالية الأداء<br> <span>بمواصفات لا تقهر</span></h1>
+            
+            <!-- Urgency Timer -->
+            <div class="urgency-timer">
+                <div class="urgency-text">🔥 عرض محدود: باقات الشهر الأول مخفضة!</div>
+                <div class="timer-blocks">
+                    <div class="t-block" id="t-hours">12</div> :
+                    <div class="t-block" id="t-mins">45</div> :
+                    <div class="t-block" id="t-secs">30</div>
+                </div>
+            </div>
 
-<script>
-/* رقمك */
-const phone = "994404008800";
+            <p>انطلق بمشروعك الآن مع سيرفرات Power الخارقة. استقرار 99.9%، أقراص تخزين فائقة السرعة NVMe، وتفعيل فوري لحسابك.</p>
+            <div class="hero-buttons">
+                <a href="#packages" class="btn-main">
+                    شراء باقة
+                    <svg style="width:20px;height:20px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </a>
+                <a href="#features" class="btn-secondary">اكتشف المميزات</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="hero-bg.png" alt="POWER Server Infrastructure">
+        </div>
+    </section>
 
-/* الباقات */
-const packages = [
-{ name:"الباقة 1", cpu:"150%", ram:"3GB", mid:"3GB", price:"20 جنيه"},
-{ name:"الباقة 2", cpu:"200%", ram:"8GB", mid:"8.5GB", price:"40 جنيه"},
-{ name:"الباقة 3", cpu:"250%", ram:"12GB", mid:"12GB", price:"70 جنيه", popular:true},
-{ name:"الباقة 4", cpu:"300%", ram:"17GB", mid:"16GB", price:"110 جنيه"},
-{ name:"الباقة 5", cpu:"350%", ram:"21GB", mid:"22GB", price:"140 جنيه"},
-{ name:"الباقة 6", cpu:"400%", ram:"25GB", mid:"26GB", price:"200 جنيه"},
-{ name:"الباقة 7", cpu:"450%", ram:"28GB", mid:"29GB", price:"270 جنيه"},
-{ name:"الباقة 8", cpu:"500%", ram:"33GB", mid:"33GB", price:"310 جنيه"}
-];
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>+99.9%</h3>
+                <p>استقرار وثبات مضمون (Uptime)</p>
+            </div>
+            <div class="stat-item">
+                <h3>+500</h3>
+                <p>سيرفر وبوت قيد التشغيل</p>
+            </div>
+            <div class="stat-item">
+                <h3>+850</h3>
+                <p>عميل سعيد يثق بنا</p>
+            </div>
+        </div>
+    </section>
 
-const container = document.getElementById("packages");
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-header">
+            <h2>لماذا تختار <span>POWER</span>؟</h2>
+            <p>قمنا بتصميم بنيتنا التحتية خصيصاً لتتحمل أقوى الضغوطات مع توفير بيئة مثالية لاستضافة مشاريعك.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 10l-10-5v6c0 5.55 3.84 10.74 10 12 6.16-1.26 10-6.45 10-12v-6l-10 5z"/></svg></div>
+                <h3>حماية شاملة (DDoS)</h3>
+                <p>سيرفرات محمية بأقصى درجات أمان لصد الهجمات الشرسة لضمان استمرار مشروعك دون انقطاع.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+                <h3>تخزين NVMe SSD</h3>
+                <p>أسرع أقراص تخزين موجودة في السوق حالياً لقراءة وكتابة البيانات في أجزاء من الثانية.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+                <h3>تفعيل آلي وفوري</h3>
+                <p>لن تنتظر طويلاً.. بمجرد طلبك للباقة سيتم تجهيز وإعداد سيرفرك تلقائياً للبدء بالعمل.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M19 2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h4l3 3 3-3h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 16H4V4h15v14z"/><path d="M11 15h2v2h-2zm0-8h2v6h-2z"/></svg></div>
+                <h3>دعم فني متواصل</h3>
+                <p>فريق محترف جاهز على مدار الساعة للتدخل السريع وتقديم الاستشارات الفنية لعملائنا.</p>
+            </div>
+        </div>
+    </section>
 
-packages.forEach((pkg,index)=>{
-const card = document.createElement("div");
-card.classList.add("card");
-if(pkg.popular) card.classList.add("popular");
+    <!-- Packages Section -->
+    <section id="packages" class="packages-section">
+        <div class="section-header">
+            <h2>باقات <span>السيرفرات</span></h2>
+            <p>اختر الباقة المناسبة لميزانيتك واحتياجاتك بخطط مرنة وموارد مخصصة لك 100%.</p>
+        </div>
+        
+        <div class="packages-grid" id="packagesContainer">
+            <!-- Packages JS -->
+        </div>
 
-card.innerHTML = `
-${pkg.popular ? '<div class="badge">💎 Most Popular</div>' : ''}
-<h2>${pkg.name}</h2>
-<p>CPU: ${pkg.cpu}</p>
-<p>RAM: ${pkg.ram}</p>
-<p>MID: ${pkg.mid}</p>
-<div class="price">${pkg.price}</div>
-<button onclick="buy('${pkg.name}')">🛒 شراء الآن</button>
-`;
+        <div class="trust-badge-container">
+            <div class="trust-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                مدفوعات آمنة وموثوقة | دعم التجربة لضمان حقك
+            </div>
+        </div>
+        
+        <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 14px; margin-top:20px;">
+           📌 تنبيه: الاشتراك بالروبل لأول شهر فقط كعرض للعملاء الجدد، والتجديد اللاحق بالجنيه.
+        </div>
+    </section>
 
-container.appendChild(card);
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="section-header">
+            <h2>ماذا يقول <span>عملاؤنا</span>؟</h2>
+            <p>نفخر بثقة مئات المطورين وأصحاب المواقع الذين يعتمدون على استضافتنا يوماً بعد يوم.</p>
+        </div>
+        <div class="testi-grid">
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p class="testi-text">"أفضل استضافة تعاملت معها! سيرفرات سريعة جداً والبوت الخاص بي يعمل بدون أي تقطيع منذ أن نقلته إليهم. الدعم الفني متجاوب سريعاً."</p>
+                <div class="testi-author">
+                    <div class="avatar">A</div>
+                    <div class="a-info">
+                        <h4>أحمد كريم</h4>
+                        <p>مطور بوتات ديسكورد</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p class="testi-text">"أسعار قوية مقارنة بالخدمة الخرافية التي أستلمها. حماية الـ DDoS حقيقية ومفيدة جداً لي. شكراً لإدارة POWER."</p>
+                <div class="testi-author">
+                    <div class="avatar">M</div>
+                    <div class="a-info">
+                        <h4>محمد محمود</h4>
+                        <p>صاحب متجر الكتروني</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p class="testi-text">"الباقة 3 ممتازة جداً لمشاريعي المتوسطة.. أنصح بها أي شخص يبحث عن جودة وسعر ممتاز. التفعيل فوري بدون تعقيد."</p>
+                <div class="testi-author">
+                    <div class="avatar">O</div>
+                    <div class="a-info">
+                        <h4>عمر طارق</h4>
+                        <p>مهندس برمجيات</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-setTimeout(()=> card.classList.add("show"), index*150);
-});
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom:15px; display:flex;">
+                    <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    <span class="logo-text">POWER</span>
+                </a>
+                <p>مؤسسة تقنية رائدة في استضافة البوتات والسيرفرات السحابية. نقدم لك القوة الكاملة لنجاح مشروعك براحة بال تامة.</p>
+                <div class="payment-methods">
+                    <div class="pay-box" style="color:#1a1f71">VISA</div>
+                    <div class="pay-box" style="color:#e61c24">V-Cash</div>
+                    <div class="pay-box" style="color:#003087">PayPal</div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul class="footer-links">
+                    <li><a href="#">⮜ التوجه للرئيسية</a></li>
+                    <li><a href="#features">⮜ مميزات البنية التحتية</a></li>
+                    <li><a href="#packages">⮜ عرض تفاصيل الباقات</a></li>
+                    <li><a href="#">⮜ شروط وأحكام الخدمة</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>الدعم والمبيعات</h4>
+                <ul class="footer-links">
+                    <li><a href="https://wa.me/994404008800" target="_blank"><span style="color:var(--neon-green); font-size:18px;">✆</span> واتساب: +994404008800</a></li>
+                    <li style="margin-top:20px; color:#facc15; font-size:13px;">نعمل على مدار الساعة لخدمتك ⚡</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 POWER Hosting Services. جميع الحقوق محفوظة لشبكة باور.
+        </div>
+    </footer>
 
+    <script>
+        // --- Mobile Menu Toggle ---
+        function toggleMenu() {
+            const nav = document.getElementById("navLinks");
+            nav.classList.toggle("active");
+        }
 
-function buy(packageName){
-let message = `مرحبا اريد شراء ${packageName}`;
-let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-window.open(url,'_blank');
-}
+        // --- Data & Package Injection ---
+        const phone = "994404008800";
+        const packages = [
+            { name:"الباقة 1", cpu:"150%", ram:"3GB", mid:"3GB", price:"20" },
+            { name:"الباقة 2", cpu:"200%", ram:"8GB", mid:"8.5GB", price:"40" },
+            { name:"الباقة 3", cpu:"250%", ram:"12GB", mid:"12GB", price:"70", popular:true },
+            { name:"الباقة 4", cpu:"300%", ram:"17GB", mid:"16GB", price:"110" },
+            { name:"الباقة 5", cpu:"350%", ram:"21GB", mid:"22GB", price:"140" },
+            { name:"الباقة 6", cpu:"400%", ram:"25GB", mid:"26GB", price:"200" },
+            { name:"الباقة 7", cpu:"450%", ram:"28GB", mid:"29GB", price:"270" },
+            { name:"الباقة 8", cpu:"500%", ram:"33GB", mid:"33GB", price:"310" }
+        ];
 
-let countDownDate = new Date().getTime() + (24*60*60*1000);
+        const container = document.getElementById("packagesContainer");
+        const checkIcon = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
 
-let x = setInterval(function(){
-let now = new Date().getTime();
-let distance = countDownDate - now;
+        packages.forEach((pkg) => {
+            const card = document.createElement("div");
+            card.classList.add("pricing-card");
+            if (pkg.popular) card.classList.add("popular");
 
-let hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-let minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-let seconds = Math.floor((distance % (1000*60)) / 1000);
+            card.innerHTML = `
+                ${pkg.popular ? '<div class="popular-badge">الأكثر طلباً 🌟</div>' : ''}
+                <div class="pkg-name">${pkg.name}</div>
+                <div class="pkg-price">${pkg.price} <span>جنيه / شهرياً</span></div>
+                <div class="pkg-specs">
+                    <div class="spec-item">${checkIcon} المعالج (CPU): ${pkg.cpu}</div>
+                    <div class="spec-item">${checkIcon} الرام (RAM): ${pkg.ram}</div>
+                    <div class="spec-item">${checkIcon} مساحة (MID): ${pkg.mid}</div>
+                    <div class="spec-item">${checkIcon} دعم فني سريع عبر الواتساب</div>
+                </div>
+                <button class="btn-buy" onclick="buy('${pkg.name}')">اطلب الآن وحدد استضافتك 🛒</button>
+            `;
+            container.appendChild(card);
+        });
 
-document.getElementById("timer").innerHTML =
-hours + "h : " + minutes + "m : " + seconds + "s ";
+        // WhatsApp Purchase Integration
+        window.buy = function(packageName) {
+            let message = `مرحباً بك في POWER، أود الاستفسار وطلب ${packageName} من فضلك.`;
+            let url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        };
 
-if(distance < 0){
-clearInterval(x);
-document.getElementById("timer").innerHTML = "انتهى العرض!";
-}
-},1000);
-particlesJS("particles-js",{
-"particles":{
-"number":{"value":60},
-"size":{"value":3},
-"move":{"speed":2},
-"line_linked":{"enable":true}
-}
-});
-const observer = new IntersectionObserver((entries)=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("show");
-}
-});
-},{
-threshold:0.2
-});
+        // --- Simulated Countdown Timer ---
+        let timeInHours = 12 * 3600 + 45 * 60 + 30; // 12h 45m 30s
+        setInterval(() => {
+            if(timeInHours <= 0) timeInHours = 12 * 3600; // Reset just for effect
+            timeInHours--;
+            let h = Math.floor(timeInHours / 3600);
+            let m = Math.floor((timeInHours % 3600) / 60);
+            let s = timeInHours % 60;
+            
+            document.getElementById("t-hours").innerText = h.toString().padStart(2, '0');
+            document.getElementById("t-mins").innerText = m.toString().padStart(2, '0');
+            document.getElementById("t-secs").innerText = s.toString().padStart(2, '0');
+        }, 1000);
 
-document.querySelectorAll(".card").forEach(card=>{
-observer.observe(card);
-});
-</script>
+        // --- Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add("show");
+                    }, index * 80); 
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
 
+        document.querySelectorAll(".pricing-card, .testi-card").forEach(card => {
+            observer.observe(card);
+        });
+
+        // --- Particles JS Initialization ---
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 30, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#38bdf8", "#22c55e", "#ffffff"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#38bdf8", "opacity": 0.15, "width": 1 },
+                "move": { "enable": true, "speed": 1.2, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
+            },
+            "retina_detect": true
+        });
+    </script>
 </body>
 </html>
